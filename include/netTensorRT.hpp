@@ -8,7 +8,7 @@
 // For plugin factory
 #include <NvInfer.h>
 #include <NvOnnxParser.h>
-#include <NvOnnxParserRuntime.h>
+
 #include <cuda_runtime.h>
 #include <fstream>
 #include <ios>
@@ -42,7 +42,7 @@ namespace segmentation {
 class Logger : public ILogger {
  public:
   void set_verbosity(bool verbose) { _verbose = verbose; }
-  void log(Severity severity, const char* msg) override {
+  void log(Severity severity, const char* msg) noexcept {
     if (_verbose) {
       switch (severity) {
         case Severity::kINTERNAL_ERROR:

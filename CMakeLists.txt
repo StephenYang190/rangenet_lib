@@ -13,6 +13,16 @@ set(CMAKE_CXX_FLAGS_RELEASE "-g -O3")
 ## Use C++11
 set (CMAKE_CXX_STANDARD 11)
 
+# Find tensorrt
+list(APPEND PLUGINS "nvinfer")
+list(APPEND PLUGINS "nvonnxparser")
+list(APPEND PLUGINS "nvparsers")
+
+foreach(libName ${PLUGINS})
+    find_library(${libName}_lib NAMES ${libName} "/usr" PATH_SUFFIXES lib)
+    list(APPEND PLUGIN_LIBS "${${libName}_lib}")
+endforeach()
+
 # check flags
 message("Build type: ${CMAKE_BUILD_TYPE}")
 

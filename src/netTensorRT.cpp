@@ -449,11 +449,12 @@ void NetTensorRT::deserializeEngine(const std::string& engine_path) {
             << std::endl;
 
   // because I use onnx-tensorRT i have to use their plugin factory
-  nvonnxparser::IPluginFactory* plug_fact =
-      nvonnxparser::createPluginFactory(_gLogger);
+//  nvinfer1::IPluginFactory* plug_fact =
+//      nvonnxparser::createPluginFactory(_gLogger);
 
   // Now deserialize
-  _engine = infer->deserializeCudaEngine(modelMem, modelSize, plug_fact);
+//  _engine = infer->deserializeCudaEngine(modelMem, modelSize, plug_fact);
+  _engine = infer->deserializeCudaEngine(modelMem, modelSize);
 
   free(modelMem);
   if (_engine) {
@@ -499,16 +500,17 @@ void NetTensorRT::generateEngine(const std::string& onnx_path) {
 
   // create inference builder
   IBuilder* builder = createInferBuilder(_gLogger);
+  IBuilderConfig* config = builder->createBuilderConfig();
 
   // set optimization parameters here
   // CAN I DO HALF PRECISION (and report to user)
   std::cout << "Platform ";
   if (builder->platformHasFastFp16()) {
     std::cout << "HAS ";
-    builder->setFp16Mode(true);
+//      config->setFp16Mode(true);
   } else {
     std::cout << "DOESN'T HAVE ";
-    builder->setFp16Mode(false);
+//      config->setFp16Mode(false);
   }
   std::cout << "fp16 support." << std::endl;
   // BATCH SIZE IS ALWAYS ONE
@@ -519,14 +521,14 @@ void NetTensorRT::generateEngine(const std::string& onnx_path) {
     !(NV_TENSORRT_MAJOR == 5 && NV_TENSORRT_MINOR == 0 && \
       NV_TENSORRT_PATCH == 0)
   if (DEVICE_DLA_0 || DEVICE_DLA_1) {
-    builder->setDefaultDeviceType(DeviceType::kDLA);
-    builder->allowGPUFallback(true);
+    config->setDefaultDeviceType(DeviceType::kDLA);
+//    config->allowGPUFallback(true);
     if (DEVICE_DLA_0) {
       std::cout << "Successfully selected DLA core 0." << std::endl;
-      builder->setDLACore(0);
+      config->setDLACore(0);
     } else if (DEVICE_DLA_0) {
       std::cout << "Successfully selected DLA core 1." << std::endl;
-      builder->setDLACore(1);
+      config->setDLACore(1);
     }
   } else {
     std::cout << "No DLA selected." << std::endl;
@@ -534,7 +536,9 @@ void NetTensorRT::generateEngine(const std::string& onnx_path) {
 #endif
 
   // create a network builder
-  INetworkDefinition* network = builder->createNetwork();
+        uint32_t flag = 1U <<static_cast<uint32_t>
+        (NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);
+        INetworkDefinition* network = builder->createNetworkV2(flag);
 
   // generate a parser to get weights from onnx file
   nvonnxparser::IParser* parser =
@@ -553,10 +557,10 @@ void NetTensorRT::generateEngine(const std::string& onnx_path) {
   for (unsigned long ws_size = MAX_WORKSPACE_SIZE;
        ws_size >= MIN_WORKSPACE_SIZE; ws_size /= 2) {
     // set size
-    builder->setMaxWorkspaceSize(ws_size);
+      config->setMaxWorkspaceSize(ws_size);
 
     // try to build
-    _engine = builder->buildCudaEngine(*network);
+    _engine = builder->buildEngineWithConfig(*network, *config);
     if (!_engine) {
       std::cerr << "Failure creating engine from ONNX model" << std::endl
                 << "Current trial size is " << ws_size << std::endl;

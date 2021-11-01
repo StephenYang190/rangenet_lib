@@ -70,7 +70,7 @@ int main(int argc, const char *argv[]) {
 
     // make defaults count, parameter check, and print
     if (vm.count("path")) {
-      path = vm["path"].as<std::string>() + "/";  // make sure path is valid
+      path = vm["path"].as<std::string>();  // make sure path is valid
       std::cout << "path: " << path << std::endl;
     } else {
       std::cerr << "No path! See --help (-h) for help. Exiting" << std::endl;
