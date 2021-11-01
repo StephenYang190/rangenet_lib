@@ -42,13 +42,12 @@ int main(int argc, const char *argv[]) {
   // Parse options
   try {
     po::options_description desc{"Options"};
-    desc.add_options()("help,h", "Help screen")(
-        "scan,s", po::value<std::string>(&scan),
-        "LiDAR scan to infer. No Default")(
-        "path,p", po::value<std::string>(),
-        "Directory to get the inference model from. No default")(
-        "verbose,v", po::bool_switch(),
-        "Verbose mode. Calculates profile (time to run)");
+    desc.add_options()
+        ("help,h", "Help screen")
+        ("scan,s", po::value<std::string>(&scan), "LiDAR scan to infer. No Default")
+        ("path,p", po::value<std::string>(), "Directory to get the inference model from. No default")
+        ("verbose,v", po::bool_switch(),"Verbose mode. Calculates profile (time to run)")
+        ;
 
     po::variables_map vm;
     po::store(parse_command_line(argc, argv, desc), vm);
