@@ -1,6 +1,4 @@
-# Set mini cmake version, set FATAL_ERROR so cmake versions 2.4 and lower fail with an error instead of just a warning
 cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
-# Set project name
 project(rangenet_lib)
 
 # handle debug vs release mode
@@ -16,13 +14,11 @@ set(CMAKE_CXX_FLAGS_RELEASE "-g -O3")
 set (CMAKE_CXX_STANDARD 11)
 
 # Find tensorrt
-# Append elements in PLUGINS list
 list(APPEND PLUGINS "nvinfer")
 list(APPEND PLUGINS "nvonnxparser")
 list(APPEND PLUGINS "nvparsers")
 
 foreach(libName ${PLUGINS})
-  # Find libraries
     find_library(${libName}_lib NAMES ${libName} "/usr" PATH_SUFFIXES lib)
     list(APPEND PLUGIN_LIBS "${${libName}_lib}")
 endforeach()
@@ -31,7 +27,6 @@ endforeach()
 message("Build type: ${CMAKE_BUILD_TYPE}")
 
 ## Find catkin macros and libraries
-# Find catkin, REQUIRED set to stop process when find failure
 find_package(catkin REQUIRED)
 
 # libyaml-cpp (required)
