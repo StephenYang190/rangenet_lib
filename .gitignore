@@ -131,4 +131,5 @@ local.properties
 
 # End of https://www.gitignore.io/api/c++,code,cmake,eclipse
 /darknet53
-
+/.idea
+/cmake-build-debug

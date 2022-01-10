@@ -4,25 +4,18 @@ This repository contains simple usage explanations of how the RangeNet++ inferen
 
 Developed by [Xieyuanli Chen](https://www.ipb.uni-bonn.de/people/xieyuanli-chen/), [Andres Milioto](https://www.ipb.uni-bonn.de/people/andres-milioto/) and [Jens Behley](https://www.ipb.uni-bonn.de/people/jens-behley/).
 
-For more details about RangeNet++, one could find in [LiDAR-Bonnetal](https://github.com/PRBonn/lidar-bonnetal).
-
 Modified by Tongda Yang for tensorrt8.
 
 My environment is:
 
 ```
-Tensorrt 8.0
-CUDA drive 11.2
-CUDA running time 11.1
-cudnn 8.2.1.32
-ubuntu 20.04
+Tensorrt = 8.0
+CUDA drive = 11.2
+CUDA running time = 11.1
+cudnn = 8.2.1.32
+ubuntu = 20.04
 ```
 
-
-
-<p align="center">
-  <img width="460" height="300" src="pics/demo.png">
-</p>
 
 ---
 ## How to use
@@ -84,7 +77,7 @@ We recommend you install GA version as the instruction of official tutorial.
 
    ```sh
    sudo cp -r ./lib/* /usr/lib
-   sudo cp -r ./include/* /user/include
+   sudo cp -r ./include/* /usr/include
    ```
 
    
@@ -132,11 +125,9 @@ catkin build rangenent_lib
 
 #### Run the demo
 
-A pre-trained model darknet have installed in the directory rangenet_lib/darknet/
+You need to install the pre-trained darknet model. [Link](http://www.ipb.uni-bonn.de/html/projects/bonnetal/lidar/semantic/predictions/darknet53.tar.gz)
 
 A single LiDAR scan for running the demo, you could find in the example folder `example/000000.bin`. For more LiDAR data, you could download from [KITTI odometry dataset](https://www.cvlibs.net/datasets/kitti/eval_odometry.php).
-
-For more details about how to train and evaluate a model, please refer to [LiDAR-Bonnetal](https://github.com/PRBonn/lidar-bonnetal).
 
 To infer a single LiDAR scan and visualize the semantic point cloud:
 
@@ -149,52 +140,3 @@ To infer a single LiDAR scan and visualize the semantic point cloud:
   ```
 
 **Notice**: for the first time running, it will take several minutes to generate a `.trt` model for C++ interface.
-
-## Applications
-#### Run SuMa++: Efficient LiDAR-based Semantic SLAM
-Using rangenet_lib, we built a LiDAR-based Semantic SLAM system, called SuMa++.
-
-You could find more implementation details in [SuMa++](https://github.com/PRBonn/semantic_suma/).
-
-#### Generate probabilities over semantic classes for OverlapNet
-OverlapNet is a LiDAR-based loop closure detection method, which uses multiple cues generated from LiDAR scans.
-
-More information about our OverlapNet could be found [here](https://github.com/PRBonn/OverlapNet).
-
-One could use our rangenet_lib to generate probabilities over semantic classes for training OverlapNet.
-
-More detailed steps and discussion could be found [here](https://github.com/PRBonn/rangenet_lib/issues/31).
-
-## Citations
-
-If you use this library for any academic work, please cite the original [paper](https://www.ipb.uni-bonn.de/wp-content/papercite-data/pdf/milioto2019iros.pdf).
-
-```
-@inproceedings{milioto2019iros,
-  author    = {A. Milioto and I. Vizzo and J. Behley and C. Stachniss},
-  title     = {{RangeNet++: Fast and Accurate LiDAR Semantic Segmentation}},
-  booktitle = {IEEE/RSJ Intl.~Conf.~on Intelligent Robots and Systems (IROS)},
-  year      = 2019,
-  codeurl   = {https://github.com/PRBonn/lidar-bonnetal},
-  videourl  = {https://youtu.be/wuokg7MFZyU},
-}
-```
-
-If you use SuMa++, please cite the corresponding [paper](https://www.ipb.uni-bonn.de/wp-content/papercite-data/pdf/chen2019iros.pdf):
-
-```
-@inproceedings{chen2019iros, 
-  author    = {X. Chen and A. Milioto and E. Palazzolo and P. Giguère and J. Behley and C. Stachniss},
-  title     = {{SuMa++: Efficient LiDAR-based Semantic SLAM}},
-  booktitle = {Proceedings of the IEEE/RSJ Int. Conf. on Intelligent Robots and Systems (IROS)},
-  year      = {2019},
-  codeurl   = {https://github.com/PRBonn/semantic_suma/},
-  videourl  = {https://youtu.be/uo3ZuLuFAzk},
-}
-```
-
-## License
-
-Copyright 2019, Xieyuanli Chen, Andres Milioto, Jens Behley, Cyrill Stachniss, University of Bonn.
-
-This project is free software made available under the MIT License. For details see the LICENSE file.
